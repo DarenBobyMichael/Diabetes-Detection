@@ -1,1 +1,0 @@
-print(x,x_train,end='\n')
