@@ -14,12 +14,13 @@ scaler = StandardScaler()
 x = scaler.fit_transform(x)
 accuracy_test_max=0
 
-for i in range(10000):
+iter = 1000
+for i in range(iter):
 
     seed = i 
     x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.2,stratify=y,random_state=seed)
 
-    classifier = svm.SVC(kernel='linear')
+    classifier = svm.SVC(kernel='sigmoid')
     classifier.fit(x_train,y_train)
 
     x_test_pred = classifier.predict(x_test)

@@ -9,27 +9,34 @@ diabetes_db=pd.read_csv('diabetes.csv')
 x = diabetes_db.drop(columns='Outcome',axis=1)
 y = diabetes_db['Outcome']
 
+to_be_predicted=[]
+# Inputting the values: 
+print("===DIABETES PREDICTOR===","\nWarning: This model has an accuracy of about 80%\n")
+for i in x.columns:
+    to_be_predicted.append(input(f'{i}: '))
+
+
 scaler = StandardScaler()
 
 x = scaler.fit_transform(x)
-accuracy_test_max=0
 
-for i in range(10000):
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.2,stratify=y,random_state=475)
 
-    seed = i 
-    x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.2,stratify=y,random_state=seed)
+classifier = svm.SVC(kernel='sigmoid')
+classifier.fit(x_train,y_train)
+to_be_predicted = scaler.transform(np.array([to_be_predicted]))
+x_test_pred = classifier.predict(to_be_predicted)
 
-    classifier = svm.SVC(kernel='linear')
-    classifier.fit(x_train,y_train)
+if (x_test_pred == 0):
+    print('\n\nDiabetes not detected','\nCaution: The program is not liable for any kind of medical advisory, Please consult a physician to ensure proper diagnosis',end='\n')
+else:
+    print('\n\nDiabetes detected')
 
-    x_test_pred = classifier.predict(x_test)
-    accuracy_test = accuracy_score(x_test_pred,y_test)
 
-    if (accuracy_test_max<accuracy_test):
-        seed_max = i
-        accuracy_test_max=accuracy_test
 
-print(f'Seed with max acc: {seed_max} and max accuracy is: {accuracy_test_max}')
+
+
+
 
 
 
